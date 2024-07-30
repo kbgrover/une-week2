@@ -8,6 +8,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('posts', PostController::class);
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('posts', PostController::class);
+    Route::resource('photos', PhotoController::class);
+    Route::get('/home', [PostController::class, 'index'])->name('home');
+});
 
-Route::resource('photos', PhotoController::class);
+Route::get('/test', [PostController::class, 'test']);
+
+Auth::routes();
